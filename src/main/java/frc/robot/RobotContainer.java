@@ -16,19 +16,22 @@ public class RobotContainer {
   public CommandXboxController mController = new CommandXboxController(0);
 
   public RobotContainer() {
-    mTankDrive = new Tankdrive(new TankdriveIOSim(DCMotor.getNeoVortex(1), 1, 3));
 
-    // mDriveCommand =
-    //     new DriveCommand(
-    //         mTankDrive,
-    //         () -> MathUtil.applyDeadband(mController.getLeftY(), 0.6),
-    //         () -> MathUtil.applyDeadband(mController.getRightX(), 0.6));
+    // switch (Constants.currentMode) {
+    //   case REAL:
+    //     break;
+    //   case SIM:
+    //     mTankDrive = new Tankdrive(new TankdriveIOSim(DCMotor.getNeoVortex(1), 1, 3));
+    //     break;
+    //   default:
+    //     break;
+    // }
 
     configureBindings();
   }
 
   private void configureBindings() {
-    // mController.a().whileTrue(new InstantCommand(() -> mTankDrive.setBothVolts(5)));
+    mController.a().whileTrue(mTankDrive.setVoltsCmd());
   }
 
   public Command getAutonomousCommand() {
