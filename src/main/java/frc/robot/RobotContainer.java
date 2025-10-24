@@ -4,28 +4,19 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-// import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.Tankdrive;
-import frc.robot.subsystems.TankdriveConstants.LeftConstants;
-import frc.robot.subsystems.TankdriveConstants.TankdriveConfiguration;
-import frc.robot.subsystems.TankdriveConstants.TankdriveHardware;
 import frc.robot.subsystems.TankdriveIOSim;
 
 public class RobotContainer {
   public Tankdrive mTankDrive;
-  // public DriveCommand mDriveCommand;
   public CommandXboxController mController = new CommandXboxController(0);
-  TankdriveHardware hardware =
-      new TankdriveHardware(LeftConstants.kLeftBackMotorID, LeftConstants.kMotorType);
-  TankdriveConfiguration config =
-      new TankdriveConfiguration(
-          LeftConstants.kSmartCurrentLimit, LeftConstants.kIdleMode, LeftConstants.kInvertedLeft);
 
   public RobotContainer() {
-    mTankDrive = new Tankdrive(new TankdriveIOSim(hardware, config));
+    mTankDrive = new Tankdrive(new TankdriveIOSim(DCMotor.getNeoVortex(1), 1, 3));
 
     // mDriveCommand =
     //     new DriveCommand(
@@ -33,12 +24,12 @@ public class RobotContainer {
     //         () -> MathUtil.applyDeadband(mController.getLeftY(), 0.6),
     //         () -> MathUtil.applyDeadband(mController.getRightX(), 0.6));
 
-    // configureBindings();
+    configureBindings();
   }
 
-  // private void configureBindings() {
-  //   mController.a().whileTrue(new InstantCommand(() -> mTankDrive.setBothVolts(5)));
-  // }
+  private void configureBindings() {
+    // mController.a().whileTrue(new InstantCommand(() -> mTankDrive.setBothVolts(5)));
+  }
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");

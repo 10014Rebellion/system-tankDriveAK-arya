@@ -1,21 +1,19 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.subsystems.TankdriveConstants.TankdriveConfiguration;
-import frc.robot.subsystems.TankdriveConstants.TankdriveHardware;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class TankdriveIOSim implements TankdriveIO {
-  private final TankdriveSparkMaxIO sim;
-  private final TankdriveHardware hardware;
-  private final TankdriveConfiguration tankdriveConfiguration;
+  private final DCMotorSim sim;
+  private final DCMotor gearbox;
 
   private double driveAppliedVolts = 0.0;
 
-  public TankdriveIOSim(TankdriveHardware phTankdrive, TankdriveConfiguration pConfig) {
-    hardware = phTankdrive;
-    tankdriveConfiguration = pConfig;
-
-    sim = new TankdriveSparkMaxIO(hardware, tankdriveConfiguration);
+  public TankdriveIOSim(DCMotor pGearBox, double reduction, double moi) {
+    gearbox = pGearBox;
+    sim = new DCMotorSim(LinearSystemId.createDCMotorSystem(gearbox, moi, reduction), gearbox);
   }
 
   @Override
@@ -23,8 +21,10 @@ public class TankdriveIOSim implements TankdriveIO {
     if (DriverStation.isDisabled()) {
       setVoltage(0);
     }
-
     inputs.driveAppliedVolts = driveAppliedVolts;
+    inputs.driveStatorCurrentAmps = Math.abs(sim.getCurrentDrawAmps());
     inputs.driveTemperatureCelsius = 0.0;
+
+    sim.update(0.02);
   }
 }

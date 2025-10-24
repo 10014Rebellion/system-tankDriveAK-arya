@@ -29,8 +29,12 @@ public class TankdriveSparkMaxIO implements TankdriveIO {
 
   @Override
   public void updateInputs(TankdriveIOInputs inputs) {
+    // Setting this to true since we don't care about this value
     inputs.isMotorConnected = true;
+
     inputs.appliedVoltage = kMotor.getAppliedOutput() * kMotor.getBusVoltage();
+    inputs.supplyCurrentAmps = kMotor.getOutputCurrent();
+    inputs.statorCurrentAmps = 0.0;
     inputs.temperatureCelsius = kMotor.getMotorTemperature();
     inputs.motorOutput = kMotor.getAppliedOutput();
   }
